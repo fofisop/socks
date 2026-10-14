@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socks to sort</title>
+</head>
+<body>
+    <h1>Sock sorter</h1>
+    <p>Drag matching identical socks on top of each other. Correct matches will disappear!</p>
+    <div id="win">Success! All socks are paired up!</div>
+    <script>
+        const Sockpics = []
+        let pairs =Sockpics.length;
+        Sockpics.forEach(filename => {
+      const el = document.createElement('div');
+      el.className = 'sock';
+          el.style.left = Math.random() * (window.innerWidth - 100) + 'px';
+      el.style.top = (Math.random() * (window.innerHeight - 220) + 120) + 'px';
+      document.body.appendChild(el);
+
+      el.onpointerdown= (e) =>{
+        el.style.zIndex = 998;
+         let shiftX = e.clientX - el.getBoundingClientRect().left;
+         let shiftX = e.clientX - el.getBoundingClientRect().top;
+         document.onpointermove = (e){
+            el.stye.zIndex = 1000;
+            let shiftX
+            let shiftY
+
+         }
+      }
+
+        }
+    </script>
+</body>
+</html>
