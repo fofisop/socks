@@ -4,6 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Socks to sort</title>
+    <style>
+        .sock{
+   position: absolute; 
+      cursor: grab; 
+      touch-action: none; 
+
+      
+        };
+        .sock img{
+width: 90px;
+height: 90px;
+display: block;
+pointer-events: none;
+
+        };
+        body{
+                text-align: center; 
+                margin: 0; 
+      height: 100vh; 
+      overflow: hidden; 
+      user-select: none;
+      
+        }
+
+    </style>
 </head>
 <body>
     <h1>Sock sorter</h1>
@@ -24,14 +49,42 @@
          let shiftX = e.clientX - el.getBoundingClientRect().left;
          let shiftX = e.clientX - el.getBoundingClientRect().top;
          document.onpointermove = (e){
-            el.stye.zIndex = 1000;
-            let shiftX
-            let shiftY
+    
+            el.style.left = e.clientX - shiftX + 'px';
+              el.style.top = e.clientY - shiftY + 'px';
 
-         }
-      }
 
-        }
+            
+
+         };
+         document.onpointerup = () =>{
+            document.onpointermove = null;
+            document.onpointerup= null;
+            el.style.zindex= null;
+             const r1 = el.getBoundingClientRect(); //hey reviewer! my friend said i need bounding client rect here and in some future lines of code that they are helping me with. they forgot to tell me what it actually means! thx in advance, because i like to know what everything in my code maens.
+        document.querySelectorAll('.sock').forEach(other =>{
+            if (other==  el )return;
+            const r2 = other.getBoundingClientRect();
+             const overlap = !(r1.right < r2.left || r1.left>r1.right||r1.bottom <r2.top|| r1.top > r2.bottom);)
+            ;
+            if (overlap &&el.dataset.type === other.dataset.type)
+        {
+              el.style.transform = 'scale(0)';
+              other.style.transform = 'scale(0)';
+                 setTimeout(() => {
+                el.remove();
+                other.remove();
+              }, 100);
+
+              if(--pairs===   0){
+                 document.getElementById('win').style.display = 'block';
+              };
+        };
+
+        }); 
+    };
+};
+});
     </script>
 </body>
 </html>
