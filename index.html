@@ -9,23 +9,39 @@
    position: absolute; 
       cursor: grab; 
       touch-action: none; 
+          transition: transform 0.1s ease-out; 
 
       
-        };
+        }
         .sock img{
-width: 90px;
-height: 90px;
+height: 210px;
 display: block;
 pointer-events: none;
 
-        };
+        }
         body{
                 text-align: center; 
                 margin: 0; 
-      height: 100vh; 
+      
       overflow: hidden; 
       user-select: none;
-      
+
+        }
+        .sock:active { cursor: grabbing; }
+
+        #win{
+            display: none;
+            position: fixed;
+             top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+
+
+
+
+
+
         }
 
     </style>
@@ -35,20 +51,28 @@ pointer-events: none;
     <p>Drag matching identical socks on top of each other. Correct matches will disappear!</p>
     <div id="win">Success! All socks are paired up!</div>
     <script>
-        const Sockpics = []
+        const Sockpics = ['buflysock.png', 'happehsocksocksock.png', 'so.png', 'soc.png', 'sock.png', 'sink.png', 'strip.png','moresocks.png']
         let pairs =Sockpics.length;
-        Sockpics.forEach(filename => {
+
+       [...Sockpics,...Sockpics] .forEach(filename => {
+
       const el = document.createElement('div');
       el.className = 'sock';
+      el.innerHTML= `<img src="${filename}" alt="sock">`;
+      el.dataset.type =filename
           el.style.left = Math.random() * (window.innerWidth - 100) + 'px';
+
       el.style.top = (Math.random() * (window.innerHeight - 220) + 120) + 'px';
+
       document.body.appendChild(el);
 
       el.onpointerdown= (e) =>{
         el.style.zIndex = 998;
+        let moveIt = false;
          let shiftX = e.clientX - el.getBoundingClientRect().left;
-         let shiftX = e.clientX - el.getBoundingClientRect().top;
-         document.onpointermove = (e){
+         let shiftY = e.clientY - el.getBoundingClientRect().top;
+         document.onpointermove = (e) => {
+            moveIt = true;
     
             el.style.left = e.clientX - shiftX + 'px';
               el.style.top = e.clientY - shiftY + 'px';
@@ -60,12 +84,13 @@ pointer-events: none;
          document.onpointerup = () =>{
             document.onpointermove = null;
             document.onpointerup= null;
-            el.style.zindex= null;
+            el.style.zIndex= null;
+            if (!moveIt) return;
              const r1 = el.getBoundingClientRect(); //hey reviewer! my friend said i need bounding client rect here and in some future lines of code that they are helping me with. they forgot to tell me what it actually means! thx in advance, because i like to know what everything in my code maens.
         document.querySelectorAll('.sock').forEach(other =>{
             if (other==  el )return;
             const r2 = other.getBoundingClientRect();
-             const overlap = !(r1.right < r2.left || r1.left>r1.right||r1.bottom <r2.top|| r1.top > r2.bottom);)
+             const overlap = !(r1.right < r2.left || r1.left > r2.right||r1.bottom <r2.top|| r1.top > r2.bottom);
             ;
             if (overlap &&el.dataset.type === other.dataset.type)
         {
