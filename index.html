@@ -33,8 +33,11 @@ pointer-events: none;
             display: none;
             position: fixed;
              top: 50%;
+             size: 500px;
             left: 50%;
             transform: translate(-50%, -50%);
+            font-size: larger;
+            bold;
 
 
 
@@ -43,16 +46,36 @@ pointer-events: none;
 
 
         }
+        #time{
+            font-size: large;
+
+        }
 
     </style>
 </head>
 <body>
     <h1>Sock sorter</h1>
     <p>Drag matching identical socks on top of each other. Correct matches will disappear!</p>
-    <div id="win">Success! All socks are paired up!</div>
+    <div id="timer">Time: 0.0 seconds</div>
+    <div id="win">Success! All socks are paired up! Restart the page to play again!</div>
     <script>
-        const Sockpics = ['buflysock.png', 'happehsocksocksock.png', 'so.png', 'soc.png', 'sock.png', 'sink.png', 'strip.png','moresocks.png']
+        const Sockpics = ['moresocks (1).png','soc (1).png','thisisasocksocksock.png','buflysock.png', 'happehsocksocksock.png', 'so.png', 'soc.png', 'sock.png', 'sink.png', 'strip.png','moresocks.png']
         let pairs =Sockpics.length;
+        let startTime = null;
+        let timerInterval = null;
+        function startTheTime(){
+             if (startTime !== null) return;
+
+    startTime = Date.now();
+
+    timerInterval = setInterval(() => {
+        const seconds = (Date.now()-startTime)/1000;
+        document.getElementById('timer').textContent =
+            `Time: ${seconds.toFixed(1)} seconds`;
+
+    },100);
+        }
+
 
        [...Sockpics,...Sockpics] .forEach(filename => {
 
@@ -67,6 +90,8 @@ pointer-events: none;
       document.body.appendChild(el);
 
       el.onpointerdown= (e) =>{
+        startTheTime();
+
         el.style.zIndex = 998;
         let moveIt = false;
          let shiftX = e.clientX - el.getBoundingClientRect().left;
@@ -101,7 +126,11 @@ pointer-events: none;
                 other.remove();
               }, 100);
 
-              if(--pairs===   0){
+              if(--pairs === 0){
+                clearInterval(timerInterval);
+                 const finalTime = ((Date.now() - startTime) / 1000).toFixed(1);
+
+    document.getElementById('win').innerHTML = `Success! All socks are paired up! Your time: ${finalTime} seconds! Restart the page to play again.`;
                  document.getElementById('win').style.display = 'block';
               };
         };
